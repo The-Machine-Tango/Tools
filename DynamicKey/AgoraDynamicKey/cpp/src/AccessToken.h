@@ -86,10 +86,10 @@ inline std::string AccessToken::GenerateSignature(
   return (HmacSign2(appCertificate, ss.str(), HMAC_SHA256_LENGTH));
 }
 
-AccessToken::AccessToken() : crc_channel_name_(0), crc_uid_(0) {
+inline AccessToken::AccessToken() : crc_channel_name_(0), crc_uid_(0) {
 }
 
-AccessToken::AccessToken(const std::string& appId,
+inline AccessToken::AccessToken(const std::string& appId,
     const std::string& appCertificate,
     const std::string& channelName,
     uint32_t uid) :
@@ -105,12 +105,12 @@ AccessToken::AccessToken(const std::string& appId,
       uidStr << uid;
     }
     uid_ = uidStr.str();
-    uint32_t now = time(NULL);
+    uint32_t now = ::time(NULL);
     message_.salt = GenerateSalt();
     message_.ts = now + 24 * 3600;
   }
 
-AccessToken::AccessToken(const std::string& appId,
+inline AccessToken::AccessToken(const std::string& appId,
     const std::string& appCertificate,
     const std::string& channelName,
     const std::string& uid) :
@@ -120,7 +120,7 @@ AccessToken::AccessToken(const std::string& appId,
   uid_(uid),
   crc_channel_name_(0),
   crc_uid_(0) {
-    uint32_t now = time(NULL);
+    uint32_t now = ::time(NULL);
     message_.salt = GenerateSalt();
     message_.ts = now + 24 * 3600;
   }
@@ -180,7 +180,7 @@ inline void AccessToken::AddPrivilege(Privileges privilege, uint32_t expireTimes
 }
 
 inline void AccessToken::SetTokenExpiredTs(uint32_t seconds) {
-  message_.ts = time(NULL) + seconds;
+  message_.ts = ::time(NULL) + seconds;
 }
 }  // namespace tools
 }  // namespace agora
